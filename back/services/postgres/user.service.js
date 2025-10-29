@@ -56,16 +56,16 @@ async function getAllUsers(criterias = {}) {
 async function updateUser(userId, updatedData) {
     return await prismaPostgres.user.update({
         where: { 
-            id: userId 
+            id_user: userId 
         },
-        update: updatedData
+        data: updatedData
     });
 }
 
 async function deleteUser(id) {
     return await prismaPostgres.user.delete({
         where: { 
-            id: id 
+            id_user: id 
         }
     });
 }
