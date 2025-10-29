@@ -1,5 +1,14 @@
 # evaluation-BDD
 
+## Installation
+
+Créer les `.env` sur la base des `.env.exemple` au même niveau que ces derniers
+
+Puis executer la commande suivante à la racine du projet :
+
+```bash
+docker compose up -d --build
+```
 
 ## Exemple de requetes :
 
