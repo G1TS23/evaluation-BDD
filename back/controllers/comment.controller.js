@@ -2,8 +2,8 @@ const commentService = require('../services/mongodb/comment.service')
 
 async function getAllComments(req, res) {
     try{
-        const { article_id, user_id } = req.query;
-        const comments = await commentService.getAllComments({ article_id, user_id });
+        const { article_id, id_user } = req.query;
+        const comments = await commentService.getAllComments({ article_id, id_user });
         res.json(comments);
     }
     catch (err) {
