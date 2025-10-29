@@ -10,4 +10,18 @@ async function getAllComments(req, res) {
     }
 };
 
-module.exports = { getAllComments }
+async function getCommentsByArticleId(req, res) {
+    try{
+        const id = parseInt(req.query.id);
+        const comments = await commentService.getCommentsByArticleId(id);
+        res.json(comments);
+    }
+    catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};
+
+module.exports = {
+    getAllComments,
+    getCommentsByArticleId
+}
