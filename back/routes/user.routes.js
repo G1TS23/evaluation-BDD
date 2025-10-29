@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const mongodbArticleService = require('../../services/mongodb/article.service');
+const postgresUserService = require('../services/postgres/user.service');
 
 module.exports = router;
