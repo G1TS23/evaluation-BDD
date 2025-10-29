@@ -14,3 +14,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL_POSTGRES")
 }
+
+model User {
+  id_user     Int       @id @default(autoincrement())
+  firstname   String
+  lastname    String
+  email       String    @unique
+  password_hash String
+  role        Role      @default(USER)
+  nb_article  Int       @default(0)
+  created_at  DateTime  @default(now())
+  articles    Article[] 
+
+  @@map("users")
+}
+
+model Article {
+  id_article  Int       @id @default(autoincrement())
+  title       String
+  description String?
+  content     String
+  created_at  DateTime  @default(now())
+  id_user     Int
+  user        User      @relation(fields: [id_user], references: [id_user])
+
+  @@map("articles")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
