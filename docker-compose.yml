@@ -4,8 +4,8 @@ services:
       context: ./back
     ports:
       - "8080:8080"
-    volumes:
-      - ./back:/usr/src/app
+    # volumes:
+    #   - ./back:/usr/src/app
     networks:
       - dbnet
 
