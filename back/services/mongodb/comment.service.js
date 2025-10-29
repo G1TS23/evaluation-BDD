@@ -4,10 +4,10 @@ const prismaMongodb = new PrismaClient();
 async function getAllComments(criterias = {}){
     const where = {}
     if (criterias.article_id) {
-        where.article_id = criterias.article_id;
+        where.article_id = parseInt(criterias.article_id);
     }
     if (criterias.id_user) {
-        where.id_user = criterias.id_user;
+        where.id_user = parseInt(criterias.id_user);
     }
     const comments = await prismaMongodb.comment.findMany({
             where,
@@ -37,10 +37,13 @@ async function createComment(comment){
 }
 
 async function updateComment(commentId, updatedData){
-    return prismaMongodb.comment.create({where: {
+    return prismaMongodb.comment.update(
+        {
+        where: {
             id: commentId
         },
-        update: updatedData}
+        data: updatedData
+        }
     );
 }
 
