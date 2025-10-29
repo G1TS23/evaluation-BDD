@@ -5,4 +5,16 @@ async function getAllComments(){
     return await prismaMongodb.comment.findMany();
 }
 
-module.exports = { getAllComments };
+async function getCommentsByArticleId(id){
+    console.log(id);
+    return prismaMongodb.comment.findMany({
+        where: {
+            article_id: id,
+        },
+    })
+}
+
+module.exports = {
+    getAllComments,
+    getCommentsByArticleId
+};
