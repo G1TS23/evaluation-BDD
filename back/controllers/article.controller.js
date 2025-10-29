@@ -31,7 +31,7 @@ async function getArticleById(req, res) {
 async function getRecentArticles(req, res) {
     try {
         const articles = await articleServiceMongodb.getAllArticles();
-        res.json(articles);    
+        res.json(articles);
     }
     catch (err) {
         res.status(500).json({message: err.message});
