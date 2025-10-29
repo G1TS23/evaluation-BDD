@@ -53,4 +53,21 @@ async function getAllUsers(criterias = {}) {
     }
 }
 
-module.exports = { createUser, getUserById, getAllUsers, };
+async function updateUser(userId, updatedData) {
+    return await prismaPostgres.user.update({
+        where: { 
+            id: userId 
+        },
+        update: updatedData
+    });
+}
+
+async function deleteUser(id) {
+    return await prismaPostgres.user.delete({
+        where: { 
+            id: id 
+        }
+    });
+}
+
+module.exports = { createUser, getUserById, getAllUsers, updateUser, deleteUser };

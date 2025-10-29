@@ -1,30 +1,13 @@
-FROM node:lts-alpine3.21
+FROM node:20
 
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
+WORKDIR /usr/src/app
 
-WORKDIR /home/node/app
-
-COPY package*.json ./
-
-RUN chown -R node:node /home/node/app
-
-USER node
+COPY . .
 
 RUN npm install
 
-# Copier d'abord les fichiers prisma
-COPY --chown=node:node prisma ./prisma
-
-# Créer les répertoires de génération
-RUN mkdir -p /home/node/app/prisma/generated/postgres && \
-    mkdir -p /home/node/app/prisma/generated/mongodb
-
-# Générer les clients Prisma
 RUN npx prisma generate --schema=prisma/postgres/schema.prisma && \
     npx prisma generate --schema=prisma/mongodb/schema.prisma
-
-COPY --chown=node:node . .
-
 
 EXPOSE 8080
 

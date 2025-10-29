@@ -8,5 +8,8 @@ router.get("/id", postgresUserController.getUserById);
 
 router.post("/", postgresUserController.createUser);
 
+router.put("/", postgresUserController.updateUser);
+
+router.delete("/", postgresUserController.deleteUser);
 
 module.exports = router;
