@@ -37,4 +37,24 @@ async function getAllUsers(req, res) {
     }
 };
 
-module.exports = { createUser, getUserById, getAllUsers, }
+async function updateUser (req, res){
+    try {
+        const idUser = parseInt(req.query.id);
+        const user = await userService.updateUser(idUser, req.body);
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
+async function deleteUser (req, res){
+    try {
+        const idUser = parseInt(req.query.id);
+        const user = await userService.deleteUser(idUser);
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
+module.exports = { createUser, getUserById, getAllUsers, updateUser, deleteUser }
