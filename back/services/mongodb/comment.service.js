@@ -1,4 +1,8 @@
-const { PrismaClient } = require('../../prisma/generated/postgres');
+const { PrismaClient } = require('../../prisma/generated/mongodb');
 const prismaMongodb = new PrismaClient();
 
-module.exports = prismaMongodb;
+async function getAllComments(){
+    return await prismaMongodb.comment.findMany();
+}
+
+module.exports = { getAllComments };

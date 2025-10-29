@@ -34,8 +34,8 @@ model Comment {
   content         String
   created_at      DateTime
   id_user         Int
-  article         Article  @relation(fields: [articleObjectId], references: [id])
-  articleObjectId String   @db.ObjectId
+  article         Article? @relation(fields: [articleObjectId], references: [id])
+  articleObjectId String?  @db.ObjectId
 
   @@map("comments")
 }
