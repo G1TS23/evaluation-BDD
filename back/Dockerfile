@@ -12,10 +12,19 @@ USER node
 
 RUN npm install
 
+# Copier d'abord les fichiers prisma
+COPY --chown=node:node prisma ./prisma
+
+# Créer les répertoires de génération
+RUN mkdir -p /home/node/app/prisma/generated/postgres && \
+    mkdir -p /home/node/app/prisma/generated/mongodb
+
+# Générer les clients Prisma
 RUN npx prisma generate --schema=prisma/postgres/schema.prisma && \
     npx prisma generate --schema=prisma/mongodb/schema.prisma
 
 COPY --chown=node:node . .
+
 
 EXPOSE 8080
 
