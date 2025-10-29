@@ -5,12 +5,37 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
-  output   = "../generated/mongodb"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
+  output        = "../generated/mongodb"
 }
 
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL_MONGO")
+}
+
+model Article {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  article_id  Int       @unique
+  title       String
+  description String?
+  content     String
+  created_at  DateTime
+  id_user     Int
+  comments    Comment[]
+
+  @@map("articles")
+}
+
+model Comment {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  article_id      Int
+  content         String
+  created_at      DateTime
+  id_user         Int
+  article         Article  @relation(fields: [articleObjectId], references: [id])
+  articleObjectId String   @db.ObjectId
+
+  @@map("comments")
 }

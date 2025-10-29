@@ -5,9 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
-  output   = "../generated/postgres"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
+  output        = "../generated/postgres"
 }
 
 datasource db {
@@ -16,27 +16,27 @@ datasource db {
 }
 
 model User {
-  id_user     Int       @id @default(autoincrement())
-  firstname   String
-  lastname    String
-  email       String    @unique
+  id_user       Int       @id @default(autoincrement())
+  firstname     String
+  lastname      String
+  email         String    @unique
   password_hash String
-  role        Role      @default(USER)
-  nb_article  Int       @default(0)
-  created_at  DateTime  @default(now())
-  articles    Article[] 
+  role          Role      @default(USER)
+  nb_article    Int       @default(0)
+  created_at    DateTime  @default(now())
+  articles      Article[]
 
   @@map("users")
 }
 
 model Article {
-  id_article  Int       @id @default(autoincrement())
+  id_article  Int      @id @default(autoincrement())
   title       String
   description String?
   content     String
-  created_at  DateTime  @default(now())
+  created_at  DateTime @default(now())
   id_user     Int
-  user        User      @relation(fields: [id_user], references: [id_user])
+  user        User     @relation(fields: [id_user], references: [id_user])
 
   @@map("articles")
 }
