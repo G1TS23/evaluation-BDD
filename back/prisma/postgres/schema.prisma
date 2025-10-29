@@ -41,7 +41,3 @@ model Article {
   @@map("articles")
 }
 
-enum Role {
-  user
-  admin
-}
