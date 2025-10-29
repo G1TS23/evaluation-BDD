@@ -17,7 +17,7 @@ async function getAllUsers(criterias = {}) {
         where.role = criterias.role;
     }
     if (criterias.nb_article) {
-        where.nb_article = criterias.nb_article;
+        where.nb_article = criterias.nb_article;    
     }
     const users = await prismaPostgres.user.findMany({
         where,
