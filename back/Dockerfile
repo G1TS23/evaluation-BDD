@@ -12,6 +12,9 @@ USER node
 
 RUN npm install
 
+RUN npx prisma generate --schema=prisma/postgres/schema.prisma && \
+    npx prisma generate --schema=prisma/mongodb/schema.prisma
+
 COPY --chown=node:node . .
 
 EXPOSE 8080

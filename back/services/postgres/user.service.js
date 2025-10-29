@@ -1,4 +1,4 @@
-import { PrismaClient } from '../prisma/generated/postgres';
+import { PrismaClient } from '../../prisma/generated/postgres';
 const prismaPostgres = new PrismaClient();
 
 module.exports = prismaPostgres;
