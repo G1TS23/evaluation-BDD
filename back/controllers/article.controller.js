@@ -1,8 +1,10 @@
-const articleService = require('../services/postgres/article.service')
+const articleServicePostgres = require('../services/postgres/article.service')
+const articleServiceMongodb = require('../services/mongodb/article.service')
 
 async function createArticle(req, res) {
     try {
-        const article = await articleService.createArticle(req.body);
+        const article = await articleServicePostgres.createArticle(req.body);
+        const articleMongo = await articleServiceMongodb.createArticle(req.body);
         res.json(article);
     }
     catch (err) {
@@ -13,7 +15,7 @@ async function createArticle(req, res) {
 async function getArticleById(req, res) {
     try {
         const id = parseInt(req.query.id);
-        const article = await articleService.getArticleById(id);
+        const article = await articleServicePostgres.getArticleById(id);
         if(article){
             res.json(article);
         }
@@ -26,10 +28,20 @@ async function getArticleById(req, res) {
     }
 };
 
+async function getRecentArticles(req, res) {
+    try {
+        const articles = await articleServiceMongodb.getAllArticles();
+        res.json(articles);    
+    }
+    catch (err) {
+        res.status(500).json({message: err.message});
+    }
+}
+
 async function getAllArticles(req, res) {
     try{
         const { title, } = req.query;
-        const articles = await articleService.getAllArticles({ title });
+        const articles = await articleServicePostgres.getAllArticles({ title });
         res.json(articles);    
     }
     catch (err) {
@@ -40,7 +52,7 @@ async function getAllArticles(req, res) {
 async function updateArticle (req, res){
     try {
         const idArticle = parseInt(req.query.id);
-        const article = await articleService.updateArticle(idArticle, req.body);
+        const article = await articleServicePostgres.updateArticle(idArticle, req.body);
         res.json(article);
     } catch (error) {
         res.status(500).json({message: error.message})
@@ -50,11 +62,11 @@ async function updateArticle (req, res){
 async function deleteArticle (req, res){
     try {
         const idArticle = parseInt(req.query.id);
-        const article = await articleService.deleteArticle(idArticle);
+        const article = await articleServicePostgres.deleteArticle(idArticle);
         res.json(article);
     } catch (error) {
         res.status(500).json({message: error.message})
     }
 }
 
-module.exports = { createArticle, getArticleById, getAllArticles, updateArticle, deleteArticle }
+module.exports = { createArticle, getArticleById, getRecentArticles, getAllArticles, updateArticle, deleteArticle }
