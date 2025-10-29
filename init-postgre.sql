@@ -3,6 +3,7 @@ CREATE SCHEMA blog;
 SET search_path TO blog;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE DOMAIN email AS TEXT
     CHECK (VALUE ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
@@ -26,9 +27,8 @@ CREATE TABLE articles (
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     id_user INTEGER NOT NULL,
     CONSTRAINT fk_id_user FOREIGN KEY (id_user) REFERENCES users (id_user)
-)
+);
 
--- 2 administrateurs
 INSERT INTO users (firstname, lastname, email, password_hash, role, nb_article)
 VALUES 
 ('Alice', 'Martin', 'alice.martin@example.com', crypt('admin1', gen_salt('bf')), 'admin', 7),
