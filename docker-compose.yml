@@ -6,6 +6,8 @@ services:
       - "8080:8080"
     volumes:
       - ./back:/home/node/app
+    networks:
+      - dbnet
 
   postgres:
     image: postgres:17
@@ -62,6 +64,8 @@ services:
     volumes:
       - mongodb_data:/data/db
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - dbnet
 
 networks:
   dbnet:
