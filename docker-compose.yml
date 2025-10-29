@@ -1,0 +1,72 @@
+services:
+  app:
+    build:
+      context: ./back
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./back:/home/node/app
+
+  postgres:
+    image: postgres:17
+    container_name: web-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+      TZ: Europe/Paris
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - init-postgre.sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U dev -d cours" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dbnet
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: web-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: $PGADMIN_DEFAULT_EMAIL
+      PGADMIN_DEFAULT_PASSWORD: $PGADMIN_DEFAULT_PASSWORD
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
+      TZ: Europe/Paris
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - dbnet
+
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+      MONGO_INITDB_DATABASE: $MONGO_INITDB_DATABASE
+    volumes:
+      - mongodb_data:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+
+networks:
+  dbnet:
+
+volumes:
+  pgdata:
+  pgadmin:
+  mongodb_data:
