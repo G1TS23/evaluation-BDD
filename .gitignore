@@ -1,0 +1,7 @@
+.idea
+
+nodes_modules
+
+.env
+.env.dev
+.env.test
