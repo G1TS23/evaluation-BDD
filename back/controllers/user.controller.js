@@ -1,4 +1,4 @@
-const userService = require('../../services/postgres/user.service')
+const userService = require('../services/postgres/user.service')
 
 async function getAllUsers(req, res) {
     try{
