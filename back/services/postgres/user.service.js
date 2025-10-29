@@ -1,6 +1,26 @@
 const { PrismaClient } = require('../../prisma/generated/postgres');
 const prismaPostgres = new PrismaClient();
 
+async function createUser(user) {
+    return await prismaPostgres.user.create({data: user});
+}
+
+async function getUserById(id) {
+    const user = await prismaPostgres.user.findUnique({
+        where: {
+            id_user: id
+        },
+        // include: {
+        //     article: true
+        // }
+    });
+    if (user) {
+        return user;
+    }
+    else {
+        return null;
+    }
+}
 
 async function getAllUsers(criterias = {}) {
     const where = {}
@@ -22,7 +42,7 @@ async function getAllUsers(criterias = {}) {
     const users = await prismaPostgres.user.findMany({
         where,
         // include: {
-        //     article: true,
+        //     article: true
         // }
     });
     if(users) {
@@ -33,4 +53,4 @@ async function getAllUsers(criterias = {}) {
     }
 }
 
-module.exports = { getAllUsers, };
+module.exports = { createUser, getUserById, getAllUsers, };

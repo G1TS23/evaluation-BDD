@@ -21,7 +21,7 @@ model User {
   lastname      String
   email         String    @unique
   password_hash String
-  role          Role      @default(user)
+  role          String    @default("user")
   nb_article    Int       @default(0)
   created_at    DateTime  @default(now())
   articles      Article[]
