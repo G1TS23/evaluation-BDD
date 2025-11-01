@@ -17,6 +17,7 @@ docker compose up -d --build
 GET http://localhost:3000/comment
 GET http://localhost:3000/comment?article_id=9
 GET http://localhost:3000/comment?id_user=5
+GET http://localhost:3000/comment?id=690231fba700f8937e4f8806
 DELETE http://localhost:3000/comment?id=690231fba700f8937e4f8806
 PUT http://localhost:3000/comment?id=690233e0db8bea977e4f8806
     body : {
