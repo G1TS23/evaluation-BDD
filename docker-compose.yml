@@ -52,7 +52,8 @@ services:
 
 
   mongodb:
-    image: mongo:7
+    build:
+      context: ./mongodb_rs
     container_name: mongodb
     restart: unless-stopped
     ports:
@@ -61,9 +62,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
       MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
       MONGO_INITDB_DATABASE: $MONGO_INITDB_DATABASE
+      MONGO_COMMAND: mongosh
+      MONGO_REPLICA_HOST: mongodb
+      MONGO_REPLICA_PORT: 27017
     volumes:
       - mongodb_data:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     networks:
       - dbnet
 

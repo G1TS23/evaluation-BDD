@@ -24,11 +24,11 @@ db.createCollection("articles", {
                     description: "Date obligatoire"
                 },
                 id_user: {
-                    bsonType: "int",
+                    bsonType: ["int", "long", "double"],
                     description: "ID obligatoire"
                 },
                 article_id: {
-                    bsonType: "int",
+                    bsonType: ["int", "long", "double"],
                     description: "ID obligatoire"
                 },
                 comments: {
@@ -38,7 +38,7 @@ db.createCollection("articles", {
                         required: ["article_id", "content", "created_at", "id_user"],
                         properties: {
                             article_id: {
-                                bsonType: "int",
+                                bsonType: ["int", "long", "double"],
                                 description: "Id de l'article obligatoire"
                             },
                             content: {
@@ -50,7 +50,7 @@ db.createCollection("articles", {
                                 description: "Date obligatoire"
                             },
                             id_user: {
-                                bsonType: "int",
+                                bsonType: ["int", "long", "double"],
                                 description: "ID obligatoire"
                             }
                         }
@@ -68,7 +68,7 @@ db.createCollection("comments", {
             required: ["article_id", "content", "created_at", "id_user"],
             properties: {
                 article_id: {
-                    bsonType: "int",
+                    bsonType: ["int", "long", "double"],
                     description: "Id de l'article obligatoire"
                 },
                 content: {
@@ -80,7 +80,7 @@ db.createCollection("comments", {
                     description: "Date obligatoire"
                 },
                 id_user: {
-                    bsonType: "int",
+                    bsonType: ["int", "long", "double"],
                     description: "ID obligatoire"
                 }
             }
