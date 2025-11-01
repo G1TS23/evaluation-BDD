@@ -9,6 +9,9 @@ async function getAllComments(criterias = {}){
     if (criterias.id_user) {
         where.id_user = parseInt(criterias.id_user);
     }
+    if (criterias.id) {
+        where.id = criterias.id;
+    }
     const comments = await prismaMongodb.comment.findMany({
             where,
         }
@@ -33,7 +36,22 @@ async function deleteComment(id){
 
 async function createComment(comment){
     //const article_id = comment.article_id;
-    return prismaMongodb.comment.create({data: comment});
+    const validatedComment = {
+        article_id: parseInt(comment.article_id),  // Convertir en int
+        content: String(comment.content),           // S'assurer que c'est une string
+        created_at: new Date(comment.created_at || Date.now()), // Convertir en Date
+        id_user: parseInt(comment.id_user)         // Convertir en int
+    };
+    console.log(validatedComment);
+    try {
+        const newComment = await prismaMongodb.comment.create({
+            data: validatedComment
+        });
+        return newComment;
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 async function updateComment(commentId, updatedData){
