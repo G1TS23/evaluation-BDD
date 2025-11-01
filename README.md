@@ -10,7 +10,7 @@ Puis executer la commande suivante à la racine du projet :
 docker compose up -d --build
 ```
 
-## Exemple de requetes :
+## Exemple de requêtes :
 
 ### Commentaires
 ```curl
