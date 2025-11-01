@@ -28,9 +28,10 @@ POST http://localhost:3000/comment
           "content": "Super article",
           "created_at": "2024-10-06T00:00:00.000Z",
           "id_user": 5,
-          "articleObjectId": null
         }
 ```
+
+### Articles
 
 ```curl
 GET http://localhost:3000/article
@@ -48,6 +49,8 @@ PUT http://localhost:3000/article/?id=21
     }
 DELETE http://localhost:3000/article/?id=21
 ```
+
+### Utilisateurs
 
 ```curl
 GET http://localhost:3000/user
