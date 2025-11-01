@@ -14,15 +14,15 @@ docker compose up -d --build
 
 ### Commentaires
 ```curl
-GET http://localhost:8080/comment
-GET http://localhost:8080/comment?article_id=9
-GET http://localhost:8080/comment?id_user=5
-DELETE http://localhost:8080/comment?id=690231fba700f8937e4f8806
-PUT http://localhost:8080/comment?id=690233e0db8bea977e4f8806
+GET http://localhost:3000/comment
+GET http://localhost:3000/comment?article_id=9
+GET http://localhost:3000/comment?id_user=5
+DELETE http://localhost:3000/comment?id=690231fba700f8937e4f8806
+PUT http://localhost:3000/comment?id=690233e0db8bea977e4f8806
     body : {
         "content": "Les index GIN ont considérablement accéléré mes recherches full-text ! Merci !!!!"
       }
-POST http://localhost:8080/comment
+POST http://localhost:3000/comment
     body : {
           "article_id": 9,
           "content": "Super article",
@@ -33,35 +33,35 @@ POST http://localhost:8080/comment
 ```
 
 ```curl
-GET http://localhost:8080/article
-GET http://localhost:8080/article/id?id=15
-POST http://localhost:8080/article/
+GET http://localhost:3000/article
+GET http://localhost:3000/article/id?id=15
+POST http://localhost:3000/article/
     body : {
         "title": "Essai",
         "description": "c'est un test",
         "content": "lorem ipsum",
         "id_user": 5
         }
-PUT http://localhost:8080/article/?id=21
+PUT http://localhost:3000/article/?id=21
     body : {
         "content": "lorem de lorem ipsum de ipsum"
     }
-DELETE http://localhost:8080/article/?id=21
+DELETE http://localhost:3000/article/?id=21
 ```
 
 ```curl
-GET http://localhost:8080/user
-GET http://localhost:8080/user/id?id=11
-POST http://localhost:8080/user/
+GET http://localhost:3000/user
+GET http://localhost:3000/user/id?id=11
+POST http://localhost:3000/user/
     body : {
         "firstname": "Test",
         "lastname": "du test",
         "email": "test@test.mail",
         "password_hash": "test1"
     }
-PUT http://localhost:8080/user/?id=11
+PUT http://localhost:3000/user/?id=11
     body : {
         "lastname": "de le test"
     }
-DELETE http://localhost:8080/user/?id=12
+DELETE http://localhost:3000/user/?id=12
 ```

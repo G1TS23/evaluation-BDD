@@ -10,6 +10,6 @@ COPY . .
 RUN npx prisma generate --schema=prisma/postgres/schema.prisma && \
     npx prisma generate --schema=prisma/mongodb/schema.prisma
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD [ "node", "app.js" ]
