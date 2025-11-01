@@ -2,7 +2,14 @@ const { PrismaClient } = require('../../prisma/generated/postgres');
 const prismaPostgres = new PrismaClient();
 
 async function createArticle(article) {
-    return await prismaPostgres.article.create({data: article});
+    const validatedArticle = {
+        title: article.title,
+        content: article.content,
+        description: article.description,
+        created_at: new Date(article.created_at || Date.now()),
+        id_user: parseInt(article.id_user),
+    }
+    return prismaPostgres.article.create({data: validatedArticle});
 }
 
 async function getArticleById(id) {
@@ -42,7 +49,7 @@ async function getAllArticles(criterias = {}) {
 }
 
 async function updateArticle(articleId, updatedData) {
-    return await prismaPostgres.article.update({
+    return prismaPostgres.article.update({
         where: { 
             id_article: articleId 
         },
@@ -51,7 +58,7 @@ async function updateArticle(articleId, updatedData) {
 }
 
 async function deleteArticle(id) {
-    return await prismaPostgres.article.delete({
+    return prismaPostgres.article.delete({
         where: { 
             id_article: id 
         }
