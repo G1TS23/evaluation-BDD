@@ -7,7 +7,20 @@ async function getAllArticles(){
 
 async function createArticle(article){
     await deleteFirstArticle();
-
+    /**
+     * @type {import('../../prisma/generated/mongodb').ArticleCreateInput}
+     */
+    const validatedArticle = {
+        title: String(article.title),
+        content: String(article.content),
+        description: String(article.description),
+        created_at: new Date(article.created_at || Date.now()),
+        id_user: parseInt(article.id_user),
+        article_id: parseInt(article.id_article),
+    }
+    return prismaMongodb.article.create({
+        data: /** @type {any} */ (validatedArticle)
+    })
 }
 
 async function deleteArticle(id){
@@ -20,15 +33,14 @@ async function deleteArticle(id){
     );
 }
 
-async function deleteFirstArticle(req, res){
-    const articles = await prismaMongodb.article.findMany();
+async function deleteFirstArticle(){
+    const articles = await getAllArticles();
     const firstArticleId = articles[0].id;
-    console.log(firstArticleId);
-    const article = await deleteArticle(firstArticleId);
-    res.json(article);
+    await deleteArticle(firstArticleId);
 }
 
 module.exports = {
     getAllArticles,
-    deleteFirstArticle
+    deleteFirstArticle,
+    createArticle,
 };

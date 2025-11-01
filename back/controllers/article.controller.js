@@ -4,7 +4,7 @@ const articleServiceMongodb = require('../services/mongodb/article.service')
 async function createArticle(req, res) {
     try {
         const article = await articleServicePostgres.createArticle(req.body);
-        const articleMongo = await articleServiceMongodb.createArticle(req.body);
+        await articleServiceMongodb.createArticle(article);
         res.json(article);
     }
     catch (err) {
@@ -26,7 +26,7 @@ async function getArticleById(req, res) {
     catch (err) {
         res.status(500).json({message: err.message});
     }
-};
+}
 
 async function getRecentArticles(req, res) {
     try {
@@ -42,12 +42,12 @@ async function getAllArticles(req, res) {
     try{
         const { title, } = req.query;
         const articles = await articleServicePostgres.getAllArticles({ title });
-        res.json(articles);    
+        res.json(articles);
     }
     catch (err) {
         res.status(500).json({message: err.message});
     }
-};
+}
 
 async function updateArticle (req, res){
     try {
