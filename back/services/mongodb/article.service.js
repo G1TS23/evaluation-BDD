@@ -2,7 +2,28 @@ const { PrismaClient } = require('../../prisma/generated/mongodb');
 const prismaMongodb = new PrismaClient();
 
 async function getAllArticles(){
-    return prismaMongodb.article.findMany();
+    return prismaMongodb.article.findMany({
+        include: {
+            comments: true
+        }
+    });
+}
+
+async function getArticleById(id){
+    const article = await prismaMongodb.article.findUnique({
+        where: {
+            article_id: id
+        },
+        include: {
+            comments: true
+        }
+    });
+    if (article) {
+        return article;
+    }
+    else {
+        return null;
+    }
 }
 
 async function createArticle(article){
@@ -27,7 +48,7 @@ async function deleteArticle(id){
     return prismaMongodb.article.delete(
         {
             where: {
-                id: id
+                article_id: id
             }
         }
     );
@@ -35,12 +56,45 @@ async function deleteArticle(id){
 
 async function deleteFirstArticle(){
     const articles = await getAllArticles();
-    const firstArticleId = articles[0].id;
+    const firstArticleId = articles[0].article_id;
     await deleteArticle(firstArticleId);
 }
 
+async function updateArticle(articleId, updatedData = {}) {
+    const data = {};
+
+    if (updatedData.title) {
+        data.title = updatedData.title;
+    }
+    if (updatedData.content) {
+        data.content = updatedData.content;
+    } 
+    if (updatedData.description) {
+        data.description = updatedData.description;
+    } 
+    if (updatedData.id_user) {
+        data.id_user = updatedData.id_user;
+    } 
+    if (updatedData.article_id) {
+        data.articleId = updatedData.article_id;
+    } 
+
+    if (updatedData.comments) {
+        data.comments = { create: updatedData.comments };
+    }
+
+    return prismaMongodb.article.update({
+        where: { article_id: articleId },
+        data: data
+    });
+}
+
+
 module.exports = {
     getAllArticles,
+    getArticleById,
     deleteFirstArticle,
     createArticle,
+    updateArticle,
+    deleteArticle,
 };

@@ -1,4 +1,5 @@
 const { PrismaClient } = require('../../prisma/generated/mongodb');
+const articleServiceMongodb = require('./article.service')
 const prismaMongodb = new PrismaClient();
 
 async function getAllComments(criterias = {}){
@@ -24,7 +25,25 @@ async function getAllComments(criterias = {}){
     }
 }
 
+async function getCommentById(id){
+    const comment = await prismaMongodb.comment.findUnique({
+        where: {
+            id: id
+        }
+    });
+    if (comment) {
+        return comment;
+    }
+    else {
+        return null;
+    }
+}
+
 async function deleteComment(id){
+    const comment = await getCommentById(id)
+    if (comment) {
+        await deleteCommentFromArticle(comment.article_id, id)
+    }
     return prismaMongodb.comment.delete(
         {
             where: {
@@ -34,35 +53,102 @@ async function deleteComment(id){
     )
 }
 
-async function createComment(comment){
-    //const article_id = comment.article_id;
+async function createComment(comment) {
     const validatedComment = {
-        article_id: parseInt(comment.article_id),  // Convertir en int
-        content: String(comment.content),           // S'assurer que c'est une string
-        created_at: new Date(comment.created_at || Date.now()), // Convertir en Date
-        id_user: parseInt(comment.id_user)         // Convertir en int
+        article_id: parseInt(comment.article_id),
+        content: String(comment.content),
+        created_at: new Date(comment.created_at || Date.now()),
+        id_user: parseInt(comment.id_user)
     };
-    console.log(validatedComment);
+
     try {
-        const newComment = await prismaMongodb.comment.create({
-            data: validatedComment
+        const recentArticles = await articleServiceMongodb.getAllArticles();
+
+        for (const article of recentArticles) {
+            if (article.article_id === validatedComment.article_id) {
+                if (article.comments.length > 4) {
+                    await deleteFirstCommentFromArticle(article.article_id);
+                }
+                await articleServiceMongodb.updateArticle(article.article_id, { comments: validatedComment });
+            }
+        }
+
+        const articleCommented = await prismaMongodb.article.findUnique({
+            where: { article_id: validatedComment.article_id },
+            include: { comments: true }
         });
-        return newComment;
+
+        return articleCommented;
     } catch (error) {
         console.log(error);
     }
-
 }
 
-async function updateComment(commentId, updatedData){
-    return prismaMongodb.comment.update(
-        {
-        where: {
-            id: commentId
-        },
-        data: updatedData
+
+async function updateComment(commentId, updatedData) {
+    try {
+        const updatedComment = await prismaMongodb.comment.update({
+            where: { id: commentId },
+            data: updatedData
+        });
+
+        const recentArticles = await articleServiceMongodb.getAllArticles();
+
+        for (const article of recentArticles) {
+            const commentIndex = article.comments.findIndex(c => c.id === commentId);
+            if (commentIndex !== -1) {
+                article.comments[commentIndex] = {
+                    ...article.comments[commentIndex],
+                    ...updatedData
+                };
+                await articleServiceMongodb.updateArticle(article.article_id, { comments: article.comments });
+                break; // eviter de loop sur les autres commentaires
+            }
         }
-    );
+
+        return updatedComment;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+async function deleteFirstCommentFromArticle(article_id){
+    const article = await articleServiceMongodb.getArticleById(article_id);
+    const firstCommentId = article.comments[0].id;
+    await removeCommentFromArticle(article_id, firstCommentId);
+}
+
+async function removeCommentFromArticle(articleId, commentId) {
+    return prismaMongodb.article.update({
+        where: { article_id: articleId },
+        data: {
+        comments: {
+            disconnect: [{ id: commentId }]
+        }
+        }
+    });
+}
+
+async function deleteCommentFromArticle(articleId, commentId) {
+    return prismaMongodb.article.update({
+        where: { article_id: articleId },
+        data: {
+        comments: {
+            delete: [{ id: commentId }]
+        }
+        }
+    });
+}
+
+async function deleteManyComment(idArticle){
+    return prismaMongodb.comment.deleteMany(
+        {
+            where: {
+                article_id: idArticle,
+            }
+        }
+    )
 }
 
 module.exports = {
@@ -70,4 +156,5 @@ module.exports = {
     deleteComment,
     createComment,
     updateComment,
+    deleteManyComment,
 };

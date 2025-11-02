@@ -1,5 +1,6 @@
 const articleServicePostgres = require('../services/postgres/article.service')
 const articleServiceMongodb = require('../services/mongodb/article.service')
+const commentServiceMongodb = require('../services/mongodb/comment.service')
 
 async function createArticle(req, res) {
     try {
@@ -53,6 +54,10 @@ async function updateArticle (req, res){
     try {
         const idArticle = parseInt(req.query.id);
         const article = await articleServicePostgres.updateArticle(idArticle, req.body);
+        const existRecent = await articleServiceMongodb.getArticleById(idArticle);
+        if (existRecent) {
+            await articleServiceMongodb.updateArticle(idArticle, req.body);
+        }
         res.json(article);
     } catch (error) {
         res.status(500).json({message: error.message})
@@ -63,6 +68,14 @@ async function deleteArticle (req, res){
     try {
         const idArticle = parseInt(req.query.id);
         const article = await articleServicePostgres.deleteArticle(idArticle);
+        const existRecent = await articleServiceMongodb.getArticleById(idArticle);
+        if (existRecent) {
+            await articleServiceMongodb.deleteArticle(idArticle);
+        }
+        const existComment = await commentServiceMongodb.getAllComments({article_id: idArticle});
+        if (existComment) {
+            await commentServiceMongodb.deleteManyComment(idArticle);
+        }
         res.json(article);
     } catch (error) {
         res.status(500).json({message: error.message})
