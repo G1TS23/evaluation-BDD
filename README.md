@@ -37,6 +37,7 @@ POST http://localhost:3000/comment
 ```curl
 GET http://localhost:3000/article
 GET http://localhost:3000/article/id?id=15
+GET http://localhost:3000/article/recent
 POST http://localhost:3000/article/
     body : {
         "title": "Essai",
