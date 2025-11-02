@@ -1,6 +1,17 @@
-# evaluation-BDD
+# Evaluation-BDD
 
-## Installation
+## Table des matières
+
+1. [Installation](#installation)
+2. [Frontend](#front)
+3. [API - Exemples de requêtes](#api)
+    1. [Commentaires](#comments)
+    2. [Articles](#articles)
+    3. [Utilisateurs](#users)
+
+&nbsp;
+
+## Installation <a name="installation"></a>
 
 Créer les `.env` sur la base des `.env.exemple` au même niveau que ces derniers
 
@@ -10,9 +21,22 @@ Puis executer la commande suivante à la racine du projet :
 docker compose up -d --build
 ```
 
-## Exemple de requêtes :
+&nbsp;
 
-### Commentaires
+## Frontend <a name="front"></a>
+
+Une ébauche de front est disponible à l'adresse [http://localhost:8080](http://localhost:8080)
+
+&nbsp;
+
+## API <a name="api"></a>
+
+### Exemple de requêtes : <a name="requests"></a>
+
+&nbsp;
+
+### Commentaires <a name="comments"></a>
+
 ```curl
 GET http://localhost:3000/comment
 GET http://localhost:3000/comment?article_id=9
@@ -32,7 +56,9 @@ POST http://localhost:3000/comment
         }
 ```
 
-### Articles
+&nbsp;
+
+### Articles <a name="articles"></a>
 
 ```curl
 GET http://localhost:3000/article
@@ -51,7 +77,9 @@ PUT http://localhost:3000/article/?id=21
 DELETE http://localhost:3000/article/?id=21
 ```
 
-### Utilisateurs
+&nbsp;
+
+### Utilisateurs <a name="users"></a>
 
 ```curl
 GET http://localhost:3000/user
