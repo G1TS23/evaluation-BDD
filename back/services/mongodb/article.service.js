@@ -27,7 +27,10 @@ async function getArticleById(id){
 }
 
 async function createArticle(article){
-    await deleteFirstArticle();
+    const recentArticles = await articleServiceMongodb.getAllArticles();
+    if (recentArticles.length > 4) {
+        await deleteFirstArticle();
+    }
     /**
      * @type {import('../../prisma/generated/mongodb').ArticleCreateInput}
      */
