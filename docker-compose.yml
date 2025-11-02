@@ -50,6 +50,20 @@ services:
     networks:
       - dbnet
 
+  web:
+    build:
+      context: ./front
+#    volumes:
+#      - ./front:/app
+#      - /app/node_modules
+#    environment:
+#      - HOST=0.0.0.0
+#      - CHOKIDAR_USEPOLLING=true
+#    command: npm run dev
+    ports:
+      - "8080:8080"
+    networks:
+      - dbnet
 
   mongodb:
     build:
