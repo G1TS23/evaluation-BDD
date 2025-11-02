@@ -10,13 +10,14 @@ Puis executer la commande suivante à la racine du projet :
 docker compose up -d --build
 ```
 
-## Exemple de requetes :
+## Exemple de requêtes :
 
 ### Commentaires
 ```curl
 GET http://localhost:3000/comment
 GET http://localhost:3000/comment?article_id=9
 GET http://localhost:3000/comment?id_user=5
+GET http://localhost:3000/comment?id=690231fba700f8937e4f8806
 DELETE http://localhost:3000/comment?id=690231fba700f8937e4f8806
 PUT http://localhost:3000/comment?id=690233e0db8bea977e4f8806
     body : {
@@ -28,9 +29,10 @@ POST http://localhost:3000/comment
           "content": "Super article",
           "created_at": "2024-10-06T00:00:00.000Z",
           "id_user": 5,
-          "articleObjectId": null
         }
 ```
+
+### Articles
 
 ```curl
 GET http://localhost:3000/article
@@ -48,6 +50,8 @@ PUT http://localhost:3000/article/?id=21
     }
 DELETE http://localhost:3000/article/?id=21
 ```
+
+### Utilisateurs
 
 ```curl
 GET http://localhost:3000/user
