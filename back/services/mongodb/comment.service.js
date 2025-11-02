@@ -39,18 +39,27 @@ async function getCommentById(id){
     }
 }
 
-async function deleteComment(id){
-    const comment = await getCommentById(id)
-    if (comment) {
-        await deleteCommentFromArticle(comment.article_id, id)
-    }
-    return prismaMongodb.comment.delete(
-        {
-            where: {
-                id: id,
-            }
+async function deleteComment(id) {
+    const comment = await getCommentById(id);
+    if (!comment) return null;
+
+    try {
+        const article = await articleServiceMongodb.getArticleById(comment.article_id);
+        if (article && article.comments.some(c => c.id === id)) {
+            await removeCommentFromArticle(comment.article_id, id);
         }
-    )
+    } catch (err) {
+        console.log(`Comment ${id} not found in article ${comment.article_id}, skipping nested delete`);
+    }
+
+    try {
+        return await prismaMongodb.comment.delete({ where: { id } });
+    } catch (err) {
+        if (err.code === 'P2025') {
+            return { message: 'Comment does not exist' };
+        }
+        throw err;
+    }
 }
 
 async function createComment(comment) {
@@ -125,17 +134,6 @@ async function removeCommentFromArticle(articleId, commentId) {
         data: {
         comments: {
             disconnect: [{ id: commentId }]
-        }
-        }
-    });
-}
-
-async function deleteCommentFromArticle(articleId, commentId) {
-    return prismaMongodb.article.update({
-        where: { article_id: articleId },
-        data: {
-        comments: {
-            delete: [{ id: commentId }]
         }
         }
     });
